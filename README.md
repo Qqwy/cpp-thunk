@@ -78,3 +78,14 @@ allowing the user to use them more freely (rather than having to manually conver
 Binary and unary operations that return another lazy/thunk could be written to 'combine thunks' and thus remain lazy.
 
 Operations that combine (a) thunk(s) with non-thunk values should evaluate the thunk at that time.
+
+### Reintroduce `Result` as most significant template parameter to the 'functionless' versions
+
+The only way I could get the functionless versions of the templates to work,
+was to introduce `Lambda` as first argument,
+and defaulting `Result` to the outcome of invoking that type (i.e. `std::invoke_result_t<Lambda>`).
+
+This has the unfortunate consequence that someone can no longer say `Lazy<std::string>` or `Thunk<int>` as is possible with the `std::function`-based versions, as the first type that needs to be specified in the template concretization is the actual type of `Lambda`, which cannot be written down as the type of an anonymous function cannot be manually specified in current C++.
+
+Maybe it is somehow possible to go the other way, and have a `Lambda = std::callable_resulting_in_t<Result>`?
+Or maybe somehow the order of `Result` and `Lambda` can be changed in the class template definition without having to refer to an undefined type?
