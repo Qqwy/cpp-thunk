@@ -75,7 +75,6 @@ template<typename Lam,
 
 
 int main(){
-  auto res = make_thunk([&]{ return std::string{"Hello, world!"}; });
-  // std::string evaluated = res;
+  Thunk res = make_thunk([&]{ return std::string{"Hello, world!"}; });
   std::cout << res << '\n';
 }
