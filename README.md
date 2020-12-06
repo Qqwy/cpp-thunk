@@ -11,6 +11,10 @@ There are probably ways to improve the template metaprogramming; I am a bit rust
 This repository has four files, each implementing a slightly different templated class 
 (and also including some example code in a `main` function which help to test whether the class definition works as intended.)
 
+Both Lazy and Thunk are written as 'normal' easy to read implementations and 'functionless' harder to read implementations that do not use `std::function`.
+
+The 'functionless' versions result in much smaller optimized compiled code (on current versions of clang++ and g++) and probably are also more performant (but I did not test this myself yet).
+
 ### Lazy
 
 Wraps a lambda (or any other callable), and behaves as a 'proxy' for the result of the lambda, executing the lambda only at the point where the result value is finally used.
@@ -41,12 +45,13 @@ This does mean that its internal data member needs to change from a `std::functi
 the implementation of the normal `Thunk` with the 'trivial constant-returning lambda' does not work, as different lambdas have different types.
 
 Evaluating the thunk now becomes slightly more involved, requiring the use of `std::visit`.
-
+Interestingly the compiler now does _not_ consider `operator Result()` a `const` member.
+However, it seems morally correct to perform a const-cast there because the change to `Thunk` is not _observable_. (don't agree? So sue me ;-) ).
 
 ## Exercises for the reader
 
 The following features were left as exercise for the reader.
-(Or, put in other words: PRs accepted ;-) )
+(Or, put in other words: PRs welcome ;-) )
 
 ### Making `Thunk` (Functionless) type-safe
 This is probably possible by adding `std::call_once` at the appropriate place in the `visit()` member function,
