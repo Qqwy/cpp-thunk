@@ -57,10 +57,6 @@ The following features were left as exercise for the reader.
 This is probably possible by adding `std::call_once` at the appropriate place in the `visit()` member function,
 but I was unable to get it to work in the couple of minutes I attempted to do it.
 
-### Implementing other operators
-As example, the extraction `operator<<` and the binary `operator+` have been implemented.
-Similar operators and other common functions can be conditionally implemented for `Lazy` and `Thunk` based on the type they wrap,
-allowing the user to use them more freely (rather than having to manually convert them in some places).
 
 ### Reducing the overhead of `std::variant`
 
@@ -72,3 +68,13 @@ the variant will never be invalid and opening up more optimizations in that way,
 
 A few years back `std::variant` was not optimized very much in gcc/clang/libc++ yet, but I don't know how much this work has progressed now.
 (It is obvously much more likely that I missed to handle some edge case in the current code that prevents the desired optimizations. I am not a perfect programmer.)
+
+
+### Implementing other operations
+As example, the extraction `operator<<` and the binary `operator+` have been implemented.
+Similar operators and other common functions can be conditionally implemented for `Lazy` and `Thunk` based on the type they wrap,
+allowing the user to use them more freely (rather than having to manually convert them in some places).
+
+Binary and unary operations that return another lazy/thunk could be written to 'combine thunks' and thus remain lazy.
+
+Operations that combine (a) thunk(s) with non-thunk values should evaluate the thunk at that time.
