@@ -53,7 +53,7 @@ However, it seems morally correct to perform a const-cast there because the chan
 The following features were left as exercise for the reader.
 (Or, put in other words: PRs welcome ;-) )
 
-### Making `Thunk` (Functionless) type-safe
+### Making `Thunk` (Functionless) thread-safe
 This is probably possible by adding `std::call_once` at the appropriate place in the `visit()` member function,
 but I was unable to get it to work in the couple of minutes I attempted to do it.
 
